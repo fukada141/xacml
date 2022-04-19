@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <!--处理器映射器-->
+    <!--处理器适配器  -->
+    <!-- 扫描web相关的bean -->
+    <context:component-scan base-package="com.xacml.Controller"/>
+    <context:component-scan base-package="com.xacml.Service"/>
+
+
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <value>text/plain;charset=UTF-8</value>
+                            <value>text/html;charset=UTF-8</value>
+                            <value>application/javascript;charset=UTF-8</value>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 开启SpringMVC注解模式 -->
+    <mvc:annotation-driven/>
+    <!--    <mvc:annotation-driven>-->
+
+    <!--        <mvc:message-converters register-defaults="true">-->
+    <!--            <bean class="org.springframework.http.converter.StringHttpMessageConverter">-->
+    <!--                <constructor-arg value="UTF-8"></constructor-arg>-->
+    <!--            </bean>-->
+    <!--            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">-->
+    <!--                <property name="objectMapper">-->
+    <!--                    <bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">-->
+    <!--                        <property name="failOnEmptyBeans" value="false"/>-->
+    <!--                    </bean>-->
+    <!--                </property>-->
+    <!--            </bean>-->
+    <!--        </mvc:message-converters>-->
+
+    <!--    </mvc:annotation-driven>-->
+    <!-- 静态资源默认servlet配置 -->
+    <mvc:default-servlet-handler/>
+
+    <!--视图解析器:DispatcherServlet给他的ModelAndView-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+          id="InternalResourceViewResolver"> <!--前缀-->
+        <property name="prefix" value="/WEB-INF/"/> <!--后缀-->
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+
+
+    <!-- 配置扫描Dao接口包，动态实现Dao接口，注入到spring容器中 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 注入sqlSessionFactory -->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <!-- 给出需要扫描Dao接口包 -->
+        <property name="basePackage" value="com.xacml.Dao"/>
+    </bean>
+    <bean id="datasource" class = "org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/xacml?serverTimezone=GMT&amp;useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+    </bean>
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="datasource"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <property name="mapperLocations" value="classpath:com/xacml/Dao/*.xml"/>
+
+    </bean>
+
+    <!-- 文件上传时需要的配置 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding"><value>UTF-8</value></property>
+        <!--单位为字节（b）-->
+        <property name="maxUploadSize"><value>2097152000</value></property>
+        <property name="maxInMemorySize"><value>8192</value></property>
+    </bean>
+
+</beans>

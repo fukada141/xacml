@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xacml.Dao.UserDao">
+
+    <insert id="insertPolicySet" parameterType="com.xacml.Entity.PolicySet">
+        INSERT INTO xacml.policyset(PolicySetID, PCAlgID, Description) VALUES (#{PolicySetID},#{PCAlgID},#{Description});
+    </insert>
+
+    <insert id="insertPolicy" parameterType="com.xacml.Entity.Policy">
+        INSERT into xacml.policy(PolicyID, RCAlgId, Description) values (#{PolicyID},#{RCAlgID},#{Description});
+    </insert>
+
+    <insert id="insertRule" parameterType="com.xacml.Entity.Rule">
+        INSERT INTO xacml.rule(RuleID, Effect, Description) VALUES (#{RuleID},#{Effect},#{Description});
+    </insert>
+
+    <insert id="insertConditions" parameterType="com.xacml.Entity.Conditions">
+        insert into xacml.conditions(FuncID, SAttDesgDT, SAttDesgID, RCPath, AttSeleDT) values (#{FuncID},#{SAttDesgDT},#{SAttDesgID},#{RCPath},#{AttSeleDT});
+    </insert>
+
+    <insert id="insertRule_Con" parameterType="map">
+        insert into xacml.rule_conditions(RuleID, FuncID) VALUES (#{RuleID},#{FuncId});
+    </insert>
+
+    <insert id="insertAction" parameterType="com.xacml.Entity.Action">
+        insert into xacml.rtargetactions(ActionMatchID, AttV, AttDT, AttDesgID, AttDesgDT) VALUES (#{ActionMatchID},#{AttV},#{AttDT},#{AttDesgID},#{AttDesgDT});
+    </insert>
+
+    <insert id="insertPolicyAction" parameterType="com.xacml.Entity.Action">
+        insert into xacml.ptargetactions(ActionMatchID, AttV, AttDT, AttDesgID, AttDesgDT) VALUES (#{ActionMatchID},#{AttV},#{AttDT},#{AttDesgID},#{AttDesgDT});
+    </insert>
+
+    <insert id="insertRule_RAct" parameterType="map">
+        insert into xacml.rule_ractions(RuleID, ActionMatchID) values (#{RuleID},#{ActionMatchId});
+    </insert>
+
+    <insert id="insertPolID_ActID" parameterType="map">
+        insert into xacml.pol_pactions(PolicyID, ActionMatchID) VALUES (#{PolicyID},#{ActionMatchId});
+    </insert>
+
+    <insert id="insertSubject" parameterType="com.xacml.Entity.Subject">
+        insert into xacml.rtargetsubjects(SubMatchID, AttV, AttDT, AttDesgID, AttDesgDT) VALUES (#{SubMatchID},#{AttV},#{AttDT},#{AttDesgID},#{AttDesgDT})
+    </insert>
+
+    <insert id="insertPolicySubject" parameterType="com.xacml.Entity.Subject">
+        insert into xacml.ptargetsubjects(SubMatchID, AttV, AttDT, AttDesgID, AttDesgDT) VALUES (#{SubMatchID},#{AttV},#{AttDT},#{AttDesgID},#{AttDesgDT});
+    </insert>
+
+    <insert id="insertRule_RSub" parameterType="map">
+        insert into xacml.rule_rsubjects(SubjectMatchID, RuleID) values (#{SubjectMatchId},#{RuleID});
+    </insert>
+
+    <insert id="insertPolID_SubID" parameterType="map">
+        insert into xacml.pol_psubjects(PolicyID, SubjectMatchID) VALUES (#{PolicyID},#{SubjectMatchId});
+    </insert>
+
+    <insert id="insertResource" parameterType="com.xacml.Entity.Resource">
+        insert into xacml.rtartgetresources(ResMatchID, AttV, AttDT, AttDesgID, AttDesgDT) VALUES (#{ResMatchID},#{AttV},#{AttDT},#{AttDesgID},#{AttDesgDT});
+    </insert>
+
+    <insert id="insertPolicyResource" parameterType="com.xacml.Entity.Resource">
+        insert into xacml.ptartgetresources(ResMatchID, AttV, AttDT, AttDesgID, AttDesgDT) VALUES (#{ResMatchID},#{AttV},#{AttDT},#{AttDesgID},#{AttDesgDT});
+    </insert>
+
+    <insert id="insertRule_RRes" parameterType="map">
+        insert into xacml.rule_rresources(ResourcesMatchID, RuleID) VALUES (#{ResourceMatchId},#{RuleID});
+    </insert>
+
+    <insert id="insertPolID_ResID" parameterType="map">
+        insert into xacml.pol_presources(PolicyID, ResourcesMatchID) VALUES (#{PolicyID},#{ResourceMatchId})
+    </insert>
+
+    <insert id="insertEnvironment" parameterType="com.xacml.Entity.Environment">
+        insert into xacml.rtargetenvironments(EnvMatchID, AttV, AttDT, AttDesg, AttDesgDT) values (#{EnvMatchID},#{AttV},#{AttDT},#{AttDesgID},#{AttDesgDT});
+    </insert>
+
+    <insert id="insertPolicyEnvironment" parameterType="com.xacml.Entity.Environment">
+        insert into xacml.ptargetenvironments(EnvMatchID, AttV, AttDT, AttDesg, AttDesgDT) values (#{EnvMatchID},#{AttV},#{AttDT},#{AttDesgID},#{AttDesgDT});
+    </insert>
+
+    <insert id="insertRule_REnv" parameterType="map">
+        insert into xacml.rule_renvironments(EnvironmentsMatchID, RuleID) VALUES (#{EnvironmentMatchId},#{RuleID})
+    </insert>
+
+    <insert id="insertPolID_EnvID" parameterType="map">
+        insert into xacml.pol_penvironments(PolicyID, EnvironmentsMatchID) VALUES (#{PolicyID},#{EnvironmentMatchId})
+    </insert>
+
+    <insert id="insertPol_Rule" parameterType="map">
+        insert into xacml.pol_rule(PolicyID, RuleID) VALUES (#{PolicyID},#{RuleID})
+    </insert>
+
+    <insert id="insertSet_Pol" parameterType="map">
+        insert into xacml.set_pol(PolicySetID, PolicyID) VALUES (#{PolicySetID},#{PolicyID})
+    </insert>
+
+    <select id="getSetDesBySetID_g" parameterType="java.lang.String" resultType="java.lang.String">
+        select Description from xacml.`policyset` where PolicySetID = #{PolicySetID};
+    </select>
+
+    <select id="getAlgBySetID_g" parameterType="java.lang.String" resultType="java.lang.String">
+        select PCAlgID from policyset where PolicySetID=#{PolicySetId};
+    </select>
+
+    <select id="queryPolIDBySetID_g" parameterType="java.lang.String" resultType="java.lang.String">
+        select PolicyID from set_pol where PolicySetID=#{PolicySetId}
+    </select>
+    
+    <select id="queryPolByID_g" parameterType="java.lang.String" resultType="com.xacml.Entity.Policy">
+        select *
+        from policy
+        where PolicyID=#{PolicyId};
+    </select>
+
+    <select id="getPolSubID_g" parameterType="java.lang.String" resultType="java.lang.String">
+        select SubjectMatchID from pol_psubjects where PolicyID=#{PolicyId};
+    </select>
+
+    <select id="getPolResID_g" parameterType="java.lang.String" resultType="java.lang.String">
+        select ResourcesMatchID from pol_presources where PolicyID=#{PolicyId};
+    </select>
+
+    <select id="getPolActID_g" parameterType="java.lang.String" resultType="java.lang.String">
+        select ActionMatchID from pol_pactions where PolicyID=#{PolicyId};
+    </select>
+
+    <select id="getPolEnvID_g" parameterType="java.lang.String" resultType="java.lang.String">
+        select EnvironmentsMatchID from pol_penvironments where PolicyID=#{PolicyId};
+    </select>
+
+    <select id="getRulSubID_g" parameterType="java.lang.String" resultType="java.lang.String">
+        select SubjectMatchID from rule_rsubjects where RuleID=#{RuleId};
+    </select>
+
+    <select id="getRulResID_g" parameterType="java.lang.String" resultType="java.lang.String">
+        select ResourcesMatchID from rule_rresources where RuleID=#{RuleId};
+    </select>
+
+    <select id="getRulActID_g" parameterType="java.lang.String" resultType="java.lang.String">
+        select ActionMatchID from rule_ractions where RuleID=#{RuleId};
+    </select>
+
+    <select id="getRulEnvID_g" parameterType="java.lang.String" resultType="java.lang.String">
+        select EnvironmentsMatchID from rule_renvironments where RuleID=#{RuleId};
+    </select>
+
+    <select id="querySubByID_g" parameterType="java.lang.String" resultType="com.xacml.Entity.Subject">
+        select * from ptargetsubjects
+        where SubMatchID = #{SubjectMatchID};
+    </select>
+
+    <select id="queryResByID_g" parameterType="java.lang.String" resultType="com.xacml.Entity.Resource">
+        select * from ptartgetresources
+        where ResMatchID = #{ResourceMatchID};
+    </select>
+
+    <select id="queryActByID_g" parameterType="java.lang.String" resultType="com.xacml.Entity.Action">
+        select * from ptargetactions
+        where ActionMatchID = #{ActionMatchID};
+    </select>
+
+    <select id="queryEnvByID_g" parameterType="java.lang.String" resultType="com.xacml.Entity.Environment">
+        select * from ptargetenvironments
+        where EnvMatchID = #{EnvironmentMatchID};
+    </select>
+
+    <select id="queryRulSubByID_g" parameterType="java.lang.String" resultType="com.xacml.Entity.Subject">
+        select * from rtargetsubjects
+        where SubMatchID = #{SubjectMatchID};
+    </select>
+
+    <select id="queryRulResByID_g" parameterType="java.lang.String" resultType="com.xacml.Entity.Resource">
+        select * from rtartgetresources
+        where ResMatchID = #{ResourceMatchID};
+    </select>
+
+    <select id="queryRulActByID_g" parameterType="java.lang.String" resultType="com.xacml.Entity.Action">
+        select * from rtargetactions
+        where ActionMatchID = #{ActionMatchID};
+    </select>
+
+    <select id="queryRulEnvByID_g" parameterType="java.lang.String" resultType="com.xacml.Entity.Environment">
+        select * from rtargetenvironments
+        where EnvMatchID = #{EnvironmentMatchID};
+    </select>
+
+    <select id="queryRulIDByPolID_g" parameterType="java.lang.String" resultType="java.lang.String">
+        select RuleID from pol_rule
+        where PolicyID=#{PolicyId}
+    </select>
+
+    <select id="queryRuleByID" parameterType="java.lang.String" resultType="com.xacml.Entity.Rule">
+        select *
+        from rule
+        where RuleID=#{RuleID};
+    </select>
+
+    <select id="queryFuncIDByRulID" parameterType="java.lang.String" resultType="java.lang.String">
+        select FuncID
+        from xacml.rule_conditions
+        where RuleID= #{RuleId}
+    </select>
+
+    <select id="queryConByID" parameterType="java.lang.String" resultType="com.xacml.Entity.Conditions">
+        select *
+        from conditions
+        where FuncID=#{FuncId};
+    </select>
+
+
+</mapper>
